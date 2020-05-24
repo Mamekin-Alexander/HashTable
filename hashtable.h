@@ -1,43 +1,45 @@
+#pragma once
 #include "hash.h"
 #include <list>
 #include <cstdlib>
 #include <ctime>
 #include <vector>
 #include <assert.h>
-template <class Key, class Value, class Hasher = Hash<Key>>
-class HashMap {
+
+template <class Key, class Value, class Hasher = myHash<Key>>
+class myHashMap {
 	struct Link {
 		Key m_key;
 		Value m_value;
 	};
 	typedef std::list<Link> Chain;
 public:
-    HashMap() {
+    myHashMap() {
 		p = 100;
 		generate_a_b();
 		m_table.reserve(p);
 		for (int32_t i = 0; i < p; ++i)
 		{
-			m_table.push_back(Chain(i));
+			m_table.push_back(Chain());
 		}
 	}
     
     // Feel free to skip these.
     // See smart pointers lab instead, if don't know what they are.
-    HashMap(const HashMap<Key, Value>& other) = delete;
-    HashMap(HashMap<Key, Value>&& other) = delete;
-    HashMap& operator=(const HashMap<Key, Value>& other) = delete;
-    HashMap& operator=(HashMap<Key, Value>&& other) = delete;
+    myHashMap(const myHashMap<Key, Value>& other) = delete;
+    myHashMap(myHashMap<Key, Value>&& other) = delete;
+    myHashMap& operator=(const myHashMap<Key, Value>& other) = delete;
+    myHashMap& operator=(myHashMap<Key, Value>&& other) = delete;
     
     bool Contains(const Key& key) const { 
 		bool result = false;
 		int64_t index = get_index(key);
 		if (!(m_table.at(index).empty()))
 		{
-			typename Chain::const_iterator i = m_table.at(index).begin();
+			typename Chain::const_iterator i = m_table.at(index).cbegin();
 			while (i != m_table.at(index).end())
 			{
-				if (i->m_key == key)
+				if (const_cast<Key&>(i->m_key) == key)
 				{
 					result = true;
 					break;
@@ -86,7 +88,7 @@ public:
 		}
 	}
     
-    ~HashMap() {
+    ~myHashMap() {
 		a = NULL;
 		b = NULL;
 		p = NULL;

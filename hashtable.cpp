@@ -6,9 +6,8 @@
 #include <random>  
 #include <ctime>  
 #include <string>
-
 TEST_CASE ( "Hashtable works with strings", "[hashtable]" ) {
-    HashMap<std::string, int> h;
+    myHashMap<std::string, int> h;
     
     REQUIRE(!h.Contains("one"));
     REQUIRE(!h.Contains("two"));
@@ -38,7 +37,7 @@ TEST_CASE ( "Hashtable works with strings", "[hashtable]" ) {
 }
 
 TEST_CASE ( "Hashtable supports element removal", "[hashtable]" ) {
-    HashMap<std::string, int> h;
+    myHashMap<std::string, int> h;
     
     REQUIRE(!h.Contains("one"));
     REQUIRE(!h.Contains("two"));
@@ -76,8 +75,8 @@ struct MyKey {
 };
 
 template<>
-struct Hash<MyKey> {
-    Hash() = default;
+struct myHash<MyKey> {
+    myHash() = default;
     
     uint64_t operator() (const MyKey& v) const {
         return v.a + v.b;
@@ -85,7 +84,7 @@ struct Hash<MyKey> {
 };
 
 TEST_CASE ( "Hashtable works with custom Hash overloads", "[hashtable]" ) {
-    HashMap<MyKey, int> h;
+    myHashMap<MyKey, int> h;
     
     REQUIRE(!h.Contains({1, 2}));
     REQUIRE(!h.Contains({2, 1}));
